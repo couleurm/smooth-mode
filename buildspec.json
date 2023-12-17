@@ -33,15 +33,15 @@
     },
     "platformConfig": {
         "macos": {
-            "bundleId": "com.example.obs-plugintemplate"
+            "bundleId": "com.example.obs-smooth-mode"
         }
     },
-    "name": "obs-plugintemplate",
-    "version": "1.0.0",
-    "author": "Your Name Here",
-    "website": "https://example.com",
-    "email": "me@example.com",
+    "name": "obs-smooth-mode",
+    "version": "0.0.1",
+    "author": "couleurm",
+    "website": "https://ctt.cx",
+    "email": "couleur@riseup.com",
     "uuids": {
-        "windowsApp": "00000000-0000-0000-0000-000000000000"
+        "windowsApp": "688cfbe8-28b4-4c50-8dab-614f8878e7bb"
     }
 }
