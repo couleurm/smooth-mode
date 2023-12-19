@@ -31,8 +31,6 @@ When configurated for a ``60`` FPS output video:
 
 Here's an agregation of open-source frame blending implementations
 
-
-
 # CPU-accelerated (Software)
 
 These solutions are slower but simpler
@@ -60,6 +58,12 @@ by luminance, chad did it in assembly
 
 For [smoothie-rs](https://github.com/couleur-tweak-tips/smoothie-rs) I now use [faster code](https://github.com/couleur-tweak-tips/smoothie-rs/blob/405f026b7f66cd74353730e7d00899e181b19ce0/target/scripts/blending.py#L16) (which I honestly admit don't understand much) which makes use of [vs-akarin](https://github.com/AkarinVS/vapoursynth-plugin)
 
+## flowfps
+
+very primitive as it decodes individual image files rgb
+
+code: https://github.com/martinjungblut/flowfps
+
 # GPU-accelerated solutions (Shader)
 
 ## OBS shader plugins
@@ -78,7 +82,7 @@ replay system addon for half-life, uses vulkan and shaders
 
 ## Frameblend.fx
 
-This has an interesting quirk: it dynamically blends whatever FPS your game's getting in the last 1/60th of a second (for 60FPS). 
+This has an interesting quirk: it dynamically blends whatever FPS your game's getting in the last 1/60th of a second (for 60FPS).
 
 [ReShade](https://reshade.me) lets you overlay shaders on games
 
