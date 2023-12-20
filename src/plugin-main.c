@@ -15,7 +15,7 @@ OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
 // smooth_mode_state
 typedef struct {
-  obs_source_t* context;
+	obs_source_t *context;
 } smooth_mode_state;
 
 // smooth_mode_frame
@@ -23,43 +23,49 @@ typedef struct {
 } smooth_mode_frame;
 
 // smooth_mode_get_name returns the filter's name.
-static const char* smooth_mode_get_name(void* input) {
-  UNUSED_PARAMETER(input);
-  return SMOOTH_MODE_NAME;
+static const char *smooth_mode_get_name(void *input)
+{
+	UNUSED_PARAMETER(input);
+	return SMOOTH_MODE_NAME;
 }
 
 // smooth_mode_create is the constructor for a new instance of
 // 'smooth_mode_state'. This instance is then treated as the filter's
 // global state.
-static void *smooth_mode_create(obs_data_t *settings, obs_source_t *context) {
-  smooth_mode_state* state = (smooth_mode_state*)bzalloc(sizeof(smooth_mode_state));
-  state->context = context;
+static void *smooth_mode_create(obs_data_t *settings, obs_source_t *context)
+{
+	smooth_mode_state *state =
+		(smooth_mode_state *)bzalloc(sizeof(smooth_mode_state));
+	state->context = context;
 
-  obs_source_update(context, settings);
-  return state;
+	obs_source_update(context, settings);
+	return state;
 }
 
 // smooth_mode_destroy is the deconstructor for the existing instance
 // of 'smooth_mode_state'. It is implicitly called by OBS whenever the
 // module is unloaded.
-static void smooth_mode_destroy(void* _state) {
-  smooth_mode_state* state = _state;
-  bfree(state);
+static void smooth_mode_destroy(void *_state)
+{
+	smooth_mode_state *state = _state;
+	bfree(state);
 }
 
 // obs_module_load is called when the module is loaded. It registers
 // the filter.
-bool obs_module_load(void) {
-	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
+bool obs_module_load(void)
+{
+	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
+		PLUGIN_VERSION);
 
 	// This is where we set all callbacks for the filter's interface.
 	struct obs_source_info smooth_mode_filter = {
-	  .id = "smooth_mode",
-	  .type = OBS_SOURCE_TYPE_FILTER,
-	  .output_flags = OBS_SOURCE_VIDEO,
-	  .get_name = smooth_mode_get_name,
-	  .create = smooth_mode_create,
-	  .destroy = smooth_mode_destroy,
+		.id = "smooth_mode",
+		.type = OBS_SOURCE_TYPE_FILTER,
+		.output_flags = OBS_SOURCE_VIDEO,
+		.get_name = smooth_mode_get_name,
+		.create = smooth_mode_create,
+		.destroy = smooth_mode_destroy,
 	};
 
 	// Register the filter and display a log message. If the
@@ -73,6 +79,7 @@ bool obs_module_load(void) {
 
 // obs_module_unload is called when the module is unloaded. It unloads
 // the filter and frees all allocated resources.
-void obs_module_unload(void) {
+void obs_module_unload(void)
+{
 	obs_log(LOG_INFO, "plugin unloaded");
 }
