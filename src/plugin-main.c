@@ -1,35 +1,78 @@
-/*
-Plugin Name
-Copyright (C) <Year> <Developer> <Email Address>
+// These headers are mandatory for the module to even exist.
+#include <obs/obs-module.h>
+#include "plugin-support.h"
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+// These headers import symbols which the module uses.
+#include <obs/obs-properties.h>
+#include <obs/obs-source.h>
+#include <obs/util/bmem.h>
+#include <obs/util/c99defs.h>
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along
-with this program. If not, see <https://www.gnu.org/licenses/>
-*/
-
-#include <obs-module.h>
-#include <plugin-support.h>
+#define SMOOTH_MODE_NAME "Smooth mode"
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
-bool obs_module_load(void)
-{
-	obs_log(LOG_INFO, "plugin loaded successfully (version %s)",
-		PLUGIN_VERSION);
+// smooth_mode_state
+typedef struct {
+  obs_source_t* context;
+} smooth_mode_state;
+
+// smooth_mode_frame
+typedef struct {
+} smooth_mode_frame;
+
+// smooth_mode_get_name returns the filter's name.
+static const char* smooth_mode_get_name(void* input) {
+  UNUSED_PARAMETER(input);
+  return SMOOTH_MODE_NAME;
+}
+
+// smooth_mode_create is the constructor for a new instance of
+// 'smooth_mode_state'. This instance is then treated as the filter's
+// global state.
+static void *smooth_mode_create(obs_data_t *settings, obs_source_t *context) {
+  smooth_mode_state* state = (smooth_mode_state*)bzalloc(sizeof(smooth_mode_state));
+  state->context = context;
+
+  obs_source_update(context, settings);
+  return state;
+}
+
+// smooth_mode_destroy is the deconstructor for the existing instance
+// of 'smooth_mode_state'. It is implicitly called by OBS whenever the
+// module is unloaded.
+static void smooth_mode_destroy(void* _state) {
+  smooth_mode_state* state = _state;
+  bfree(state);
+}
+
+// obs_module_load is called when the module is loaded. It registers
+// the filter.
+bool obs_module_load(void) {
+	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
+
+	// This is where we set all callbacks for the filter's interface.
+	struct obs_source_info smooth_mode_filter = {
+	  .id = "smooth_mode",
+	  .type = OBS_SOURCE_TYPE_FILTER,
+	  .output_flags = OBS_SOURCE_VIDEO,
+	  .get_name = smooth_mode_get_name,
+	  .create = smooth_mode_create,
+	  .destroy = smooth_mode_destroy,
+	};
+
+	// Register the filter and display a log message. If the
+	// registration causes OBS to crash, we'll never see the success
+	// message, which is the desired behaviour.
+	obs_register_source(&smooth_mode_filter);
+	obs_log(LOG_INFO, "filter source successfully registered");
+
 	return true;
 }
 
-void obs_module_unload(void)
-{
+// obs_module_unload is called when the module is unloaded. It unloads
+// the filter and frees all allocated resources.
+void obs_module_unload(void) {
 	obs_log(LOG_INFO, "plugin unloaded");
 }
