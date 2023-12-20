@@ -5,10 +5,12 @@
 // These headers import symbols which the module uses.
 #include <obs-properties.h>
 #include <obs-source.h>
+#include <obs.h>
 #include <util/bmem.h>
 #include <util/c99defs.h>
 
-#define SMOOTH_MODE_NAME "Smooth mode"
+#define DEBUG_MODE 1
+#define TEXT_NAME "Smooth mode"
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
@@ -26,7 +28,7 @@ typedef struct {
 static const char *smooth_mode_get_name(void *input)
 {
 	UNUSED_PARAMETER(input);
-	return SMOOTH_MODE_NAME;
+	return TEXT_NAME;
 }
 
 // smooth_mode_create is the constructor for a new instance of
@@ -51,6 +53,21 @@ static void smooth_mode_destroy(void *_state)
 	bfree(state);
 }
 
+// smooth_mode_tick
+static void smooth_mode_tick(void *_state, float t)
+{
+	UNUSED_PARAMETER(t);
+
+	smooth_mode_state *state = _state;
+	obs_source_t *target = obs_filter_get_target(state->context);
+
+	if (!!target) {
+#if DEBUG_MODE
+		obs_log(LOG_INFO, "smooth_mode_tick: target valid");
+#endif
+	}
+}
+
 // obs_module_load is called when the module is loaded. It registers
 // the filter.
 bool obs_module_load(void)
@@ -66,6 +83,7 @@ bool obs_module_load(void)
 		.get_name = smooth_mode_get_name,
 		.create = smooth_mode_create,
 		.destroy = smooth_mode_destroy,
+		.video_tick = smooth_mode_tick,
 	};
 
 	// Register the filter and display a log message. If the
