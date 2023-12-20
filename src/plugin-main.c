@@ -1,12 +1,12 @@
 // These headers are mandatory for the module to even exist.
-#include <obs/obs-module.h>
+#include <obs-module.h>
 #include "plugin-support.h"
 
 // These headers import symbols which the module uses.
-#include <obs/obs-properties.h>
-#include <obs/obs-source.h>
-#include <obs/util/bmem.h>
-#include <obs/util/c99defs.h>
+#include <obs-properties.h>
+#include <obs-source.h>
+#include <util/bmem.h>
+#include <util/c99defs.h>
 
 #define SMOOTH_MODE_NAME "Smooth mode"
 
