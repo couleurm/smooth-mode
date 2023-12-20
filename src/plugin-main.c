@@ -19,8 +19,8 @@ typedef struct {
 } smooth_mode_state;
 
 // smooth_mode_frame
-typedef struct {
-} smooth_mode_frame;
+// typedef struct {
+// } smooth_mode_frame;
 
 // smooth_mode_get_name returns the filter's name.
 static const char *smooth_mode_get_name(void *input)
